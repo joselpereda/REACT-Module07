@@ -1,1 +1,1 @@
-# REACT-Module07
+# COMP 693 Module 07 Assignment
