@@ -5,7 +5,7 @@ import { LoaderTargetPlugin } from 'webpack'
 export default class EmployeeAdd extends React.Component {
     constructor() {
         super()
-        this.State = {
+        this.state = {
             modalVisible: false,
         }
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -14,15 +14,14 @@ export default class EmployeeAdd extends React.Component {
     }
 
     handleShowModal() {
-        this.setState = ({modalVisible: true,})
+        this.setState({modalVisible: true,})
     }
 
     handleHideModal() {
-
+        this.setState({modalVisible: false,})
     }
 
     handleSubmit(e) {
-        e.preventDefault()
         const form = document.forms.employeeAdd
         const employee = {
             name: form.name.value,
@@ -37,36 +36,48 @@ export default class EmployeeAdd extends React.Component {
         form.ext.value = ''
         form.email.value = ''
         form.title.value = ''
+        this.setState({modalVisible: false,})
     }
     render() {
         return(
             <>
-                <div>
-                    <Button variant='primary' size='sm' onClick={this.handleShowModal}>
+                <div className="addEmployee">
+                    <Button variant="primary" size="sm" onClick={this.handleShowModal} onHide={this.handleHideModal} centered>
                         New Employee
                     </Button> 
                 </div>
-                <Container fluid>
-                    <form name="employeeAdd" onSubmit={this.handleSubmit}>
-                        <Row>
-                            <Col md={3}>Name: </Col>
-                            <Col md="auto"><input type="text" name="name" /></Col>
-                        </Row>
-                        <Row>
-                            <Col md={3}>Extension:</Col> 
-                            <Col md="auto"><input type="text" name="ext" maxLength={4}/></Col>
-                        </Row>
-                        <Row>
-                            <Col md={3}>Email:</Col> 
-                            <Col md="auto"><input type="text" name="email" /></Col>
-                        </Row>
-                        <Row>
-                            <Col md={3}>Title: </Col> 
-                            <Col md="auto"><input type="text" name="title" /></Col>
-                            <Button type="submit" variant="primary" size='sm'>Add Employee</Button>
-                        </Row>
-                    </form>
-                </Container>
+
+                <Modal show={this.state.modalVisible}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Add New Employee</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Container fluid>
+                            <form name="employeeAdd">
+                                <Row>
+                                    <Col md={3}>Name: </Col>
+                                    <Col md="auto"><input type="text" name="name" /></Col>
+                                </Row>
+                                <Row>
+                                    <Col md={3}>Extension:</Col> 
+                                    <Col md="auto"><input type="text" name="ext" maxLength={4}/></Col>
+                                </Row>
+                                <Row>
+                                    <Col md={3}>Email:</Col> 
+                                    <Col md="auto"><input type="text" name="email" /></Col>
+                                </Row>
+                                <Row>
+                                    <Col md={3}>Title: </Col> 
+                                    <Col md="auto"><input type="text" name="title" /></Col>
+                                </Row>
+                            </form>
+                        </Container>
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button type="submit" variant="success" size='sm' onClick={this.handleSubmit}>Add Employee</Button>
+                    </Modal.Footer>
+                </Modal>
             </>
         )
     } 
