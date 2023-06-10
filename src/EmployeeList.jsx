@@ -1,5 +1,5 @@
 import React from 'react'
-import {Badge, Button, Table} from 'react-bootstrap'
+import {Badge, Button, Table, Modal} from 'react-bootstrap'
 
 import EmployeeFilter from './EmployeeFilter.jsx'
 import EmployeeAdd from './EmployeeAdd.jsx'
@@ -52,20 +52,55 @@ function EmployeeTable(props) {
 }
 
 function EmployeeRow (props) {
-    function onDeledteClick() {
-        props.deleteEmployee(props.employee._id)
-    }
-    return (
-        <tr>
-            <td><Link to={`/edit/${props.employee._id}`}>{props.employee.name}</Link></td>
-            <td>{props.employee.extension}</td>
-            <td>{props.employee.email}</td>
-            <td>{props.employee.title}</td>
-            <td>{props.employee.dateHired.toDateString()}</td>
-            <td>{props.employee.currentlyEmployed ? 'Yes' : 'No'}</td>
-            <td><Button variant="danger" size='sm' onClick={onDeledteClick}>X</Button></td>
-        </tr>
-    )
+    constructor(props) {
+        super(props);
+        this.state = {
+          modalVisible: false
+        };
+        this.toggleModal = this.toggleModal.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
+      }
+    
+      toggleModal() {
+        this.setState(prevState => ({
+          modalVisible: !prevState.modalVisible
+        }));
+      }
+
+      render() {
+        const { employee } = this.props;
+        const { modalVisible } = this.state;
+    
+        return (
+          <tr>
+            <td>{employee.name}</td>
+            <td>{employee.position}</td>
+            <td>{employee.salary}</td>
+            <td>
+              <Button variant="danger" onClick={this.toggleModal}>
+                Delete
+              </Button>
+    
+              <Modal show={modalVisible} onHide={this.toggleModal}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Confirm Delete</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  Are you sure you want to delete the employee: {employee.name}?
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button variant="secondary" onClick={this.toggleModal}>
+                    Cancel
+                  </Button>
+                  <Button variant="danger" onClick={this.handleDelete}>
+                    Yes
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            </td>
+          </tr>
+        );
+      }
 }
 
 export default class EmployeeList extends React.Component {
